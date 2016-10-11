@@ -1,0 +1,1 @@
+./Debug/main.cpp.o ./Debug/Cursor.cpp.o ./Debug/GameConsole.cpp.o ./Debug/Plane.cpp.o   
