@@ -7,6 +7,7 @@ class GameConsole
 private:
 	int state;
 	Cursor cursor;
+    void hide_cursor();
 public:
 	GameConsole();
 	~GameConsole();

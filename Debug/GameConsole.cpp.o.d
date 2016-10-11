@@ -1,7 +1,12 @@
-Debug/GameConsole.cpp.o: GameConsole.cpp GameConsole.h Cursor.h Plane.h
+Debug/GameConsole.cpp.o: GameConsole.cpp GameConsole.h Cursor.h \
+ PlayerPlane.h plane.h Flyer.h
 
 GameConsole.h:
 
 Cursor.h:
 
-Plane.h:
+PlayerPlane.h:
+
+plane.h:
+
+Flyer.h:

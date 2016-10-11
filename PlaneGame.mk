@@ -62,7 +62,7 @@ AS       := E:/TDM-GCC-64/bin/as.exe
 ## User defined environment variables
 ##
 CodeLiteDir:=E:\Program Files\CodeLite
-Objects0=$(IntermediateDirectory)/main.cpp$(ObjectSuffix) $(IntermediateDirectory)/Cursor.cpp$(ObjectSuffix) $(IntermediateDirectory)/GameConsole.cpp$(ObjectSuffix) $(IntermediateDirectory)/Plane.cpp$(ObjectSuffix) 
+Objects0=$(IntermediateDirectory)/main.cpp$(ObjectSuffix) $(IntermediateDirectory)/Cursor.cpp$(ObjectSuffix) $(IntermediateDirectory)/GameConsole.cpp$(ObjectSuffix) $(IntermediateDirectory)/Plane.cpp$(ObjectSuffix) $(IntermediateDirectory)/PlayerPlane.cpp$(ObjectSuffix) $(IntermediateDirectory)/Flyer.cpp$(ObjectSuffix) 
 
 
 
@@ -124,6 +124,22 @@ $(IntermediateDirectory)/Plane.cpp$(DependSuffix): Plane.cpp
 
 $(IntermediateDirectory)/Plane.cpp$(PreprocessSuffix): Plane.cpp
 	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/Plane.cpp$(PreprocessSuffix)Plane.cpp
+
+$(IntermediateDirectory)/PlayerPlane.cpp$(ObjectSuffix): PlayerPlane.cpp $(IntermediateDirectory)/PlayerPlane.cpp$(DependSuffix)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "F:/code/CodeLite/WorkSpace/PlaneGame/PlayerPlane.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/PlayerPlane.cpp$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/PlayerPlane.cpp$(DependSuffix): PlayerPlane.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/PlayerPlane.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/PlayerPlane.cpp$(DependSuffix) -MM PlayerPlane.cpp
+
+$(IntermediateDirectory)/PlayerPlane.cpp$(PreprocessSuffix): PlayerPlane.cpp
+	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/PlayerPlane.cpp$(PreprocessSuffix)PlayerPlane.cpp
+
+$(IntermediateDirectory)/Flyer.cpp$(ObjectSuffix): Flyer.cpp $(IntermediateDirectory)/Flyer.cpp$(DependSuffix)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "F:/code/CodeLite/WorkSpace/PlaneGame/Flyer.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/Flyer.cpp$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/Flyer.cpp$(DependSuffix): Flyer.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/Flyer.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/Flyer.cpp$(DependSuffix) -MM Flyer.cpp
+
+$(IntermediateDirectory)/Flyer.cpp$(PreprocessSuffix): Flyer.cpp
+	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/Flyer.cpp$(PreprocessSuffix)Flyer.cpp
 
 
 -include $(IntermediateDirectory)/*$(DependSuffix)

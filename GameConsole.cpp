@@ -4,7 +4,7 @@
 #include<conio.h>
 #include<time.h>
 #include<string>
-#include "Plane.h"
+#include "PlayerPlane.h"
 #include <windows.h>
 #include <conio.h>
 #include <iostream>
@@ -22,16 +22,22 @@ GameConsole::~GameConsole()
 {
 }
 
+void GameConsole::hide_cursor()
+{
+    CONSOLE_CURSOR_INFO info = { 1, 0 };
+	SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &info);
+}
 
 void GameConsole::start()
 {
+    hide_cursor();
 	HANDLE h_in;
 	h_in = GetStdHandle(STD_INPUT_HANDLE);
 	INPUT_RECORD input_record;
 	DWORD record;
 	
 
-	Plane p1('W', 0, 0);
+	PlayerPlane p1('W', 0, 0);
 	p1.draw();
 
 	while (true)

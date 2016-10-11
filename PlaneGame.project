@@ -100,5 +100,11 @@
     <File Name="GameConsole.h"/>
     <File Name="Plane.cpp"/>
     <File Name="Plane.h"/>
+    <File Name="PlayerPlane.h"/>
+    <File Name="PlayerPlane.cpp"/>
+    <File Name="Flyer.h"/>
+    <File Name="Flyer.cpp"/>
+    <File Name="Bullet.h"/>
+    <File Name="Bullet.cpp"/>
   </VirtualDirectory>
 </CodeLite_Project>
