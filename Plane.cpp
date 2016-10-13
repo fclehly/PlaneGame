@@ -7,16 +7,18 @@ using namespace std;
 
 Plane::Plane(char s, COORD p)
 {
+    visibility = false;
 	shape = s;
-	position.X = p.X;
-	position.Y = p.Y;
+	position.X = p.X % MAX_COL;
+	position.Y = p.Y % MAX_ROW;
 }
 
 Plane::Plane(char s, int x, int y)
 {
+    visibility = false;
 	shape = s;
-	position.X = x;
-	position.Y = y;
+	position.X = x % MAX_COL;
+	position.Y = y % MAX_ROW;
 }
 
 Plane::~Plane()
@@ -25,14 +27,29 @@ Plane::~Plane()
 
 void Plane::draw()
 {
-	Cursor cursor(position);
-	cursor.set_cursor();
-	cout << shape;
+    if (!visibility)
+    {
+        visibility = true;
+        Cursor cursor(position);
+        cursor.set_cursor();
+        cout << shape;
+    }
+}
+
+void Plane::hide()
+{
+    if (visibility)
+    {
+        visibility = false;
+        Cursor cursor(position);
+        cursor.set_cursor();
+        cout << ' ';
+    }
 }
 
 void Plane::move_down()
 {
-	if (position.Y < MAX_ROW)
+	if (position.Y < MAX_ROW - 1)
 	{
 		Cursor cursor(position);
 		cursor.set_cursor();
@@ -45,7 +62,7 @@ void Plane::move_down()
 
 void Plane::move_up()
 {
-	if (position.Y > MIN_ROW)
+	if (position.Y > MIN_ROW + 1)
 	{
 		Cursor cursor(position);
 		cursor.set_cursor();
@@ -58,7 +75,7 @@ void Plane::move_up()
 
 void Plane::move_left()
 {
-	if (position.X > MIN_COL)
+	if (position.X > MIN_COL + 1)
 	{
 		Cursor cursor(position);
 		cursor.set_cursor();
@@ -71,7 +88,7 @@ void Plane::move_left()
 
 void Plane::move_right()
 {
-	if (position.X < MAX_COL)
+	if (position.X < MAX_COL - 1)
 	{
 		Cursor cursor(position);
 		cursor.set_cursor();

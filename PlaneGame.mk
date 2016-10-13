@@ -13,7 +13,7 @@ CurrentFileName        :=
 CurrentFilePath        :=
 CurrentFileFullPath    :=
 User                   :=fwz
-Date                   :=11/10/2016
+Date                   :=12/10/2016
 CodeLitePath           :="E:/Program Files/CodeLite"
 LinkerName             :=E:/TDM-GCC-64/bin/g++.exe
 SharedObjectLinkerName :=E:/TDM-GCC-64/bin/g++.exe -shared -fPIC
@@ -62,7 +62,7 @@ AS       := E:/TDM-GCC-64/bin/as.exe
 ## User defined environment variables
 ##
 CodeLiteDir:=E:\Program Files\CodeLite
-Objects0=$(IntermediateDirectory)/main.cpp$(ObjectSuffix) $(IntermediateDirectory)/Cursor.cpp$(ObjectSuffix) $(IntermediateDirectory)/GameConsole.cpp$(ObjectSuffix) $(IntermediateDirectory)/Plane.cpp$(ObjectSuffix) $(IntermediateDirectory)/PlayerPlane.cpp$(ObjectSuffix) $(IntermediateDirectory)/Flyer.cpp$(ObjectSuffix) 
+Objects0=$(IntermediateDirectory)/main.cpp$(ObjectSuffix) $(IntermediateDirectory)/Cursor.cpp$(ObjectSuffix) $(IntermediateDirectory)/GameConsole.cpp$(ObjectSuffix) $(IntermediateDirectory)/Plane.cpp$(ObjectSuffix) $(IntermediateDirectory)/PlayerPlane.cpp$(ObjectSuffix) $(IntermediateDirectory)/Flyer.cpp$(ObjectSuffix) $(IntermediateDirectory)/Bullet.cpp$(ObjectSuffix) $(IntermediateDirectory)/EnemyPlane.cpp$(ObjectSuffix) 
 
 
 
@@ -140,6 +140,22 @@ $(IntermediateDirectory)/Flyer.cpp$(DependSuffix): Flyer.cpp
 
 $(IntermediateDirectory)/Flyer.cpp$(PreprocessSuffix): Flyer.cpp
 	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/Flyer.cpp$(PreprocessSuffix)Flyer.cpp
+
+$(IntermediateDirectory)/Bullet.cpp$(ObjectSuffix): Bullet.cpp $(IntermediateDirectory)/Bullet.cpp$(DependSuffix)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "F:/code/CodeLite/WorkSpace/PlaneGame/Bullet.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/Bullet.cpp$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/Bullet.cpp$(DependSuffix): Bullet.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/Bullet.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/Bullet.cpp$(DependSuffix) -MM Bullet.cpp
+
+$(IntermediateDirectory)/Bullet.cpp$(PreprocessSuffix): Bullet.cpp
+	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/Bullet.cpp$(PreprocessSuffix)Bullet.cpp
+
+$(IntermediateDirectory)/EnemyPlane.cpp$(ObjectSuffix): EnemyPlane.cpp $(IntermediateDirectory)/EnemyPlane.cpp$(DependSuffix)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "F:/code/CodeLite/WorkSpace/PlaneGame/EnemyPlane.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/EnemyPlane.cpp$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/EnemyPlane.cpp$(DependSuffix): EnemyPlane.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/EnemyPlane.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/EnemyPlane.cpp$(DependSuffix) -MM EnemyPlane.cpp
+
+$(IntermediateDirectory)/EnemyPlane.cpp$(PreprocessSuffix): EnemyPlane.cpp
+	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/EnemyPlane.cpp$(PreprocessSuffix)EnemyPlane.cpp
 
 
 -include $(IntermediateDirectory)/*$(DependSuffix)

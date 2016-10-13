@@ -1,10 +1,12 @@
 #pragma once
 #include "Flyer.h"
+#include "Cursor.h"
 
 class Bullet
 {
 private:
 	char shape;
+    bool visibility;
     COORD position;
 public:
     Bullet(char s, COORD p);
@@ -14,6 +16,7 @@ public:
 	void move_left();
 	void move_right();
 	void draw();
+    void hide();
     ~Bullet();
 
 };

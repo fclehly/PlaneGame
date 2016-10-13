@@ -4,8 +4,9 @@
 
 class Plane: public Flyer
 {
-private:
+protected:
 	char shape;
+    bool visibility;
     COORD position;
 public:
 	Plane(char s, COORD p);
@@ -15,6 +16,7 @@ public:
 	void move_left();
 	void move_right();
 	void draw();
+    void hide();
 	~Plane();
 };
 

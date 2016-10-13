@@ -106,5 +106,7 @@
     <File Name="Flyer.cpp"/>
     <File Name="Bullet.h"/>
     <File Name="Bullet.cpp"/>
+    <File Name="EnemyPlane.h"/>
+    <File Name="EnemyPlane.cpp"/>
   </VirtualDirectory>
 </CodeLite_Project>

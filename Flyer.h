@@ -13,6 +13,7 @@ public:
     virtual void move_left() = 0;
     virtual void move_right() = 0;
     virtual void draw() = 0;
+    virtual void hide() = 0;
 
 };
 

@@ -1,7 +1,10 @@
 #include "Bullet.h"
+#include <iostream>
+using namespace std;
 
 Bullet::Bullet(char s, COORD p)
 {
+    visibility = false;
 	shape = s;
 	position.X = p.X;
 	position.Y = p.Y;
@@ -9,6 +12,7 @@ Bullet::Bullet(char s, COORD p)
 
 Bullet::Bullet(char s, int x, int y)
 {
+    visibility = false;
 	shape = s;
 	position.X = x;
 	position.Y = y;
@@ -20,9 +24,24 @@ Bullet::~Bullet()
 
 void Bullet::draw()
 {
-	Cursor cursor(position);
-	cursor.set_cursor();
-	cout << shape;
+   if (!visibility)
+    {
+        visibility = true;
+        Cursor cursor(position);
+        cursor.set_cursor();
+        cout << shape;
+    }
+}
+
+void Bullet::hide()
+{
+    if (visibility)
+    {
+        visibility = false;
+        Cursor cursor(position);
+        cursor.set_cursor();
+        cout << ' ';
+    }
 }
 
 void Bullet::move_down()

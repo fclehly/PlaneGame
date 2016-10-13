@@ -12,3 +12,7 @@ PlayerPlane::~PlayerPlane()
 {
 }
 
+void PlayerPlane::shoot()
+{
+    
+}
