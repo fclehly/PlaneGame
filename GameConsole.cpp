@@ -4,9 +4,7 @@
 #include <conio.h>
 #include <time.h>
 #include <string>
-#include "Cursor.h"
-#include "PlayerPlane.h"
-#include "EnemyPlane.h"
+
 #include <windows.h>
 #include <conio.h>
 #include <iostream>
@@ -26,7 +24,6 @@ GameConsole::~GameConsole()
 
 void GameConsole::draw_background()
 {
-    Cursor cursor;
     for (int i = 0; i < MAX_COL; ++i)
     {
         cursor.set_cursor(i, MIN_ROW);
@@ -51,7 +48,6 @@ void GameConsole::hide_cursor()
 
 void GameConsole::print_end_info()
 {
-    Cursor cursor(40, 12);
     cursor.set_cursor();
     cout << "END" << endl;
     cursor.set_cursor(MIN_COL, MAX_ROW);
@@ -75,37 +71,33 @@ void GameConsole::start()
 
 	PlayerPlane p1('W', MAX_COL / 2, MAX_ROW - 1);
 	p1.draw();
-    EnemyPlane enemy[10] = {
-        EnemyPlane('T'), 
-        EnemyPlane('T'), 
-        EnemyPlane('T'), 
-        EnemyPlane('T'), 
-        EnemyPlane('T'), 
-        EnemyPlane('T'), 
-        EnemyPlane('T'), 
-        EnemyPlane('T'), 
-        EnemyPlane('T'), 
-        EnemyPlane('T')};
- 
-    int count;
+    EnemyPlane enemy[ENEMY_MAX] =
+    {
+        EnemyPlane('T', 0, 0),
+        EnemyPlane('T', 0, 0),
+        EnemyPlane('T', 0, 0),
+        EnemyPlane('T', 0, 0),
+        EnemyPlane('T', 0, 0),
+        EnemyPlane('T', 0, 0),
+        EnemyPlane('T', 0, 0),
+        EnemyPlane('T', 0, 0),
+        EnemyPlane('T', 0, 0),
+        EnemyPlane('T', 0, 0),
+        EnemyPlane('T', 0, 0),
+        EnemyPlane('T', 0, 0),
+        EnemyPlane('T', 0, 0),
+        EnemyPlane('T', 0, 0),
+        EnemyPlane('T', 0, 0),
+        EnemyPlane('T', 0, 0),
+        EnemyPlane('T', 0, 0),
+        EnemyPlane('T', 0, 0),
+        EnemyPlane('T', 0, 0),
+        EnemyPlane('T', 0, 0),
+    };
 
+    int count = 0;
 	while (true)
 	{
-//        if (e1.get_position().Y < MAX_ROW - 1)
-//        {
-//            Sleep(100);
-//            count++;
-//            if (count >= 5) 
-//            {
-//                count = 0;
-//                e1.move_down();
-//            }
-//        }
-//        else
-//        {
-//            e1.hide();
-//        }
-        
         if (_kbhit())
         {
             ReadConsoleInput(h_in, &input_record, 1, &record);
@@ -126,14 +118,42 @@ void GameConsole::start()
                 case VK_RIGHT:
                     p1.move_right();
                     break;
-                case VK_SPACE:
-                    e1.fly();
-                    break;
                 case VK_ESCAPE:
                     break;
                 }
             }
         }
+        Sleep(100);
+        count++;
+        if (count >= 5)
+        {
+            count = 0;
+            for (int i = 0; i < ENEMY_MAX; ++i)
+            {
+                if (!enemy[i].is_flyable())
+                {
+                    enemy[i].set_flyable(true);
+                    enemy[i].set_position(random(MIN_COL + 1, MAX_COL - 1), MIN_ROW + 1);
+                    enemy[i].draw();
+                    break;
+                }
+            }
+            for (int i = 0; i < ENEMY_MAX; ++i)
+            {
+                if (enemy[i].is_flyable())
+                {
+                    enemy[i].move_down();
+                    if (enemy[i].get_position().Y == MAX_ROW - 1)
+                    {
+                        enemy[i].set_flyable(false);
+                        enemy[i].hide();
+                        enemy[i].set_position(MIN_COL + 1, MIN_ROW + 1);
+                    }
+                }
+            }
+        }
+        
+        
 		if (state == STATE_GAME_END)
 		{
 			break;

@@ -2,14 +2,17 @@
 
 EnemyPlane::EnemyPlane(char s): Plane(s)
 {
+    flyable = false;
 }
 
 EnemyPlane::EnemyPlane(char s, COORD p): Plane(s, p)
 {
+    flyable = false;
 }
 
 EnemyPlane::EnemyPlane(char s, int x, int y): Plane(s, x, y)
 {
+    flyable = false;
 }
 
 EnemyPlane::~EnemyPlane()
@@ -30,3 +33,12 @@ void EnemyPlane::fly()
     }
 }
 
+bool EnemyPlane::is_flyable()
+{
+    return flyable;
+}
+
+void EnemyPlane::set_flyable(bool value)
+{
+    flyable = value;
+}
