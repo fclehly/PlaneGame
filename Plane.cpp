@@ -3,7 +3,13 @@
 #include <iostream>
 using namespace std;
 
-
+Plane::Plane(char s)
+{
+    visibility = false;
+	shape = s;
+	position.X = 0;
+	position.Y = 0;
+}
 
 Plane::Plane(char s, COORD p)
 {
@@ -32,7 +38,7 @@ void Plane::draw()
         visibility = true;
         Cursor cursor(position);
         cursor.set_cursor();
-        cout << shape;
+        cout << shape << flush;
     }
 }
 
@@ -43,8 +49,24 @@ void Plane::hide()
         visibility = false;
         Cursor cursor(position);
         cursor.set_cursor();
-        cout << ' ';
+        cout << ' ' << flush;
     }
+}
+
+COORD Plane::get_position()
+{
+    return position;
+}
+
+void Plane::set_position(COORD p)
+{
+	set_position(p.X, p.Y);
+}
+
+void Plane::set_position(int x, int y)
+{
+	position.X = x;
+	position.Y = y;
 }
 
 void Plane::move_down()
@@ -53,10 +75,10 @@ void Plane::move_down()
 	{
 		Cursor cursor(position);
 		cursor.set_cursor();
-		cout << " ";
+		cout << " " << flush;
 		position.Y++;
 		cursor.set_cursor(position);
-		cout << shape;
+		cout << shape << flush;
 	}
 }
 
@@ -66,10 +88,10 @@ void Plane::move_up()
 	{
 		Cursor cursor(position);
 		cursor.set_cursor();
-		cout << " ";
+		cout << " " << flush;
 		position.Y--;
 		cursor.set_cursor(position);
-		cout << shape;
+		cout << shape << flush;
 	}
 }
 
@@ -79,10 +101,10 @@ void Plane::move_left()
 	{
 		Cursor cursor(position);
 		cursor.set_cursor();
-		cout << " ";
+		cout << " " << flush;
 		position.X--;
 		cursor.set_cursor(position);
-		cout << shape;
+		cout << shape << flush;
 	}
 }
 
@@ -92,9 +114,9 @@ void Plane::move_right()
 	{
 		Cursor cursor(position);
 		cursor.set_cursor();
-		cout << " ";
+		cout << " " << flush;
 		position.X++;
 		cursor.set_cursor(position);
-		cout << shape;
+		cout << shape << flush;
 	}
 }

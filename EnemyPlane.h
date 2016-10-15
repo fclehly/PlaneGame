@@ -4,6 +4,7 @@
 class EnemyPlane: public Plane
 {
 public:
+    EnemyPlane(char s);
     EnemyPlane(char s, COORD p);
     EnemyPlane(char s, int x, int y);
     ~EnemyPlane();

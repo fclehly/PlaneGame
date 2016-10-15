@@ -57,6 +57,12 @@ void GameConsole::print_end_info()
     cursor.set_cursor(MIN_COL, MAX_ROW);
 }
 
+int GameConsole::random(int low, int high)
+{
+    int rand_num = low + (rand() % (high - low));
+    return rand_num;
+}
+
 void GameConsole::start()
 {
     draw_background();
@@ -67,38 +73,67 @@ void GameConsole::start()
 	DWORD record;
 	
 
-	PlayerPlane p1('W', 1, 1);
+	PlayerPlane p1('W', MAX_COL / 2, MAX_ROW - 1);
 	p1.draw();
-    EnemyPlane e1('T', 15, 1);
+    EnemyPlane enemy[10] = {
+        EnemyPlane('T'), 
+        EnemyPlane('T'), 
+        EnemyPlane('T'), 
+        EnemyPlane('T'), 
+        EnemyPlane('T'), 
+        EnemyPlane('T'), 
+        EnemyPlane('T'), 
+        EnemyPlane('T'), 
+        EnemyPlane('T'), 
+        EnemyPlane('T')};
+ 
+    int count;
 
 	while (true)
 	{
-		ReadConsoleInput(h_in, &input_record, 1, &record);
-		if (record == 1 && input_record.EventType == KEY_EVENT && input_record.Event.KeyEvent.bKeyDown == TRUE)
-		{
+//        if (e1.get_position().Y < MAX_ROW - 1)
+//        {
+//            Sleep(100);
+//            count++;
+//            if (count >= 5) 
+//            {
+//                count = 0;
+//                e1.move_down();
+//            }
+//        }
+//        else
+//        {
+//            e1.hide();
+//        }
+        
+        if (_kbhit())
+        {
+            ReadConsoleInput(h_in, &input_record, 1, &record);
+            if (record == 1 && input_record.EventType == KEY_EVENT && input_record.Event.KeyEvent.bKeyDown == TRUE)
+            {
 
-			switch (input_record.Event.KeyEvent.wVirtualKeyCode)
-			{
-			case VK_DOWN:
-				p1.move_down();
+                switch (input_record.Event.KeyEvent.wVirtualKeyCode)
+                {
+                case VK_DOWN:
+                    p1.move_down();
+                    break;
+                case VK_UP:
+                    p1.move_up();
+                    break;
+                case VK_LEFT:
+                    p1.move_left();
 				break;
-			case VK_UP:
-				p1.move_up();
-				break;
-			case VK_LEFT:
-				p1.move_left();
-				break;
-			case VK_RIGHT:
-				p1.move_right();
-				break;
-            case VK_SPACE:
-                e1.fly();
-                break;
-			case VK_ESCAPE:
-				state = STATE_GAME_END;
-				break;
-			}
-		}
+                case VK_RIGHT:
+                    p1.move_right();
+                    break;
+                case VK_SPACE:
+                    e1.fly();
+                    break;
+                case VK_ESCAPE:
+                    break;
+                }
+            }
+        }
 		if (state == STATE_GAME_END)
 		{
 			break;

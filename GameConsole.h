@@ -14,6 +14,7 @@ private:
     void hide_cursor();
     void draw_background();
     void print_end_info();
+    int random(int low, int high);
 public:
 	GameConsole();
 	~GameConsole();

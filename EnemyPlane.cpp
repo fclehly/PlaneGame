@@ -1,5 +1,9 @@
 #include "EnemyPlane.h"
 
+EnemyPlane::EnemyPlane(char s): Plane(s)
+{
+}
+
 EnemyPlane::EnemyPlane(char s, COORD p): Plane(s, p)
 {
 }
