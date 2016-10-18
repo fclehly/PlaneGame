@@ -14,6 +14,7 @@ public:
     virtual void move_right() = 0;
     virtual void draw() = 0;
     virtual void hide() = 0;
+    virtual bool get_visibility() = 0;
     virtual COORD get_position() = 0;
     virtual void set_position(COORD p) = 0;
 };

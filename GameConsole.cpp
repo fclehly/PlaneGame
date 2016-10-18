@@ -71,6 +71,32 @@ void GameConsole::start()
 
 	PlayerPlane p1('W', MAX_COL / 2, MAX_ROW - 1);
 	p1.draw();
+    
+    Bullet bullet[BULLET_MAX] = 
+    {
+        Bullet('^', 1, MAX_ROW - 1),
+        Bullet('^', 1, MAX_ROW - 1),
+        Bullet('^', 1, MAX_ROW - 1),
+        Bullet('^', 1, MAX_ROW - 1),
+        Bullet('^', 1, MAX_ROW - 1),
+        Bullet('^', 1, MAX_ROW - 1),
+        Bullet('^', 1, MAX_ROW - 1),
+        Bullet('^', 1, MAX_ROW - 1),
+        Bullet('^', 1, MAX_ROW - 1),
+        Bullet('^', 1, MAX_ROW - 1),
+        Bullet('^', 1, MAX_ROW - 1),
+        Bullet('^', 1, MAX_ROW - 1),
+        Bullet('^', 1, MAX_ROW - 1),
+        Bullet('^', 1, MAX_ROW - 1),
+        Bullet('^', 1, MAX_ROW - 1),
+        Bullet('^', 1, MAX_ROW - 1),
+        Bullet('^', 1, MAX_ROW - 1),
+        Bullet('^', 1, MAX_ROW - 1),
+        Bullet('^', 1, MAX_ROW - 1),
+        Bullet('^', 1, MAX_ROW - 1),
+        Bullet('^', 1, MAX_ROW - 1),
+    };
+    
     EnemyPlane enemy[ENEMY_MAX] =
     {
         EnemyPlane('T', 0, 0),
@@ -103,7 +129,7 @@ void GameConsole::start()
             ReadConsoleInput(h_in, &input_record, 1, &record);
             if (record == 1 && input_record.EventType == KEY_EVENT && input_record.Event.KeyEvent.bKeyDown == TRUE)
             {
-
+                int j = 0;
                 switch (input_record.Event.KeyEvent.wVirtualKeyCode)
                 {
                 case VK_DOWN:
@@ -114,17 +140,47 @@ void GameConsole::start()
                     break;
                 case VK_LEFT:
                     p1.move_left();
-				break;
+                    break;
                 case VK_RIGHT:
                     p1.move_right();
                     break;
+                case VK_SPACE:
+                    for (j = 0; j < BULLET_MAX; ++j)
+                    {
+                        if (!bullet[j].get_visibility())
+                        {
+                            bullet[j].set_position(p1.get_position().X, p1.get_position().Y - 1);
+                            bullet[j].draw();
+                            break;
+                        }
+                    }
+                    break;
                 case VK_ESCAPE:
+                    state = STATE_GAME_END;
                     break;
                 }
             }
         }
         Sleep(100);
         count++;
+        
+        for (int i = 0; i < BULLET_MAX; ++i)
+        {
+            if (bullet[i].get_visibility())
+            {
+                
+                if (bullet[i].get_position().Y == MIN_ROW + 1)
+                {
+                    bullet[i].hide();
+                    bullet[i].set_position(1, MAX_ROW - 1);
+                }
+                else
+                {
+                    bullet[i].move_up();
+                }
+                
+            }
+        }
         if (count >= 5)
         {
             count = 0;
@@ -148,6 +204,25 @@ void GameConsole::start()
                         enemy[i].set_flyable(false);
                         enemy[i].hide();
                         enemy[i].set_position(MIN_COL + 1, MIN_ROW + 1);
+                    }
+                }
+            }
+        }
+        
+        for (int i = 0; i < BULLET_MAX; ++i)
+        {
+            if (bullet[i].get_visibility())
+            {
+                for (int j = 0; j < ENEMY_MAX; ++j)
+                {
+                    if (enemy[j].is_flyable() && enemy[j].is_collision(bullet[i].get_position()))
+                    {
+                        enemy[j].hide();
+                        enemy[j].set_flyable(false);
+                        enemy[j].set_position(MIN_COL + 1, MIN_ROW + 1);
+                        bullet[i].hide();
+                        bullet[i].set_position(MIN_COL + 1, MAX_ROW - 1);
+                        break;
                     }
                 }
             }

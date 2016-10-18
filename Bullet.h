@@ -2,7 +2,7 @@
 #include "Flyer.h"
 #include "Cursor.h"
 
-class Bullet
+class Bullet: public Flyer
 {
 private:
 	char shape;
@@ -17,6 +17,10 @@ public:
 	void move_right();
 	void draw();
     void hide();
+    bool get_visibility();
+    COORD get_position();
+    void set_position(COORD p);
+    void set_position(int x, int y);
     ~Bullet();
 
 };

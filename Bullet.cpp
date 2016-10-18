@@ -44,6 +44,29 @@ void Bullet::hide()
     }
 }
 
+bool Bullet::get_visibility()
+{
+    return visibility;
+}
+
+COORD Bullet::get_position()
+{
+    return position;
+}
+
+void Bullet::set_position(COORD p)
+{
+	set_position(p.X, p.Y);
+}
+
+void Bullet::set_position(int x, int y)
+{
+	position.X = x;
+	position.Y = y;
+}
+
+
+
 void Bullet::move_down()
 {
 }

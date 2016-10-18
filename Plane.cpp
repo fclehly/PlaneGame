@@ -53,6 +53,11 @@ void Plane::hide()
     }
 }
 
+bool Plane::get_visibility()
+{
+    return visibility;
+}
+
 COORD Plane::get_position()
 {
     return position;
@@ -119,4 +124,14 @@ void Plane::move_right()
 		cursor.set_cursor(position);
 		cout << shape << flush;
 	}
+}
+
+bool Plane::is_collision(COORD p)
+{
+    return is_collision(p.X, p.Y);
+}
+
+bool Plane::is_collision(int x, int y)
+{
+    return (position.X == x && position.Y == y);
 }
