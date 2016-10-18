@@ -17,11 +17,12 @@ private:
 
 	int state;
 	Cursor cursor;
-    
+    int score;
     void hide_cursor();
     void draw_background();
     void print_end_info();
     int random(int low, int high);
+    void update_score();
 public:
 	GameConsole();
 	~GameConsole();

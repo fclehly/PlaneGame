@@ -15,6 +15,7 @@ using namespace std;
 GameConsole::GameConsole()
 {
 	state = STATE_GAME_ON;
+    score = 0;
 }
 
 
@@ -38,6 +39,27 @@ void GameConsole::draw_background()
         cursor.set_cursor(MAX_COL, i);
         cout << '|';
     }
+    
+    cursor.set_cursor(MAX_COL + 4, 0);
+    char up = 24;
+    char down = 25;
+    char right = 26;
+    char left = 27;
+    cout << "Press " << up << down << left << right << " to move.";
+    cursor.set_cursor(MAX_COL + 4, 1);
+    cout << "Press space to shoot.";
+    cursor.set_cursor(MAX_COL + 4, 2);
+    cout << "Press esc to exit.";
+    cursor.set_cursor(MAX_COL + 4, 3);
+    cout << "-------------------------";
+    cursor.set_cursor(MAX_COL + 4, 4);
+    cout << "Score:  0";
+}
+
+void GameConsole::update_score()
+{
+    cursor.set_cursor(MAX_COL + 12, 4);
+    cout << score << flush;
 }
 
 void GameConsole::hide_cursor()
@@ -48,8 +70,10 @@ void GameConsole::hide_cursor()
 
 void GameConsole::print_end_info()
 {
-    cursor.set_cursor();
-    cout << "END" << endl;
+    cursor.set_cursor(30, 15);
+    cout << "END" << flush;
+    cursor.set_cursor(30, 17);
+    cout << "Final Score: " << score;
     cursor.set_cursor(MIN_COL, MAX_ROW);
 }
 
@@ -163,7 +187,7 @@ void GameConsole::start()
         }
         Sleep(100);
         count++;
-        
+        //bullet move
         for (int i = 0; i < BULLET_MAX; ++i)
         {
             if (bullet[i].get_visibility())
@@ -181,6 +205,7 @@ void GameConsole::start()
                 
             }
         }
+        //enemy move
         if (count >= 5)
         {
             count = 0;
@@ -199,6 +224,11 @@ void GameConsole::start()
                 if (enemy[i].is_flyable())
                 {
                     enemy[i].move_down();
+                    if (enemy[i].is_collision(p1.get_position()))
+                    {
+                        state = STATE_GAME_END;
+                        break;
+                    }
                     if (enemy[i].get_position().Y == MAX_ROW - 1)
                     {
                         enemy[i].set_flyable(false);
@@ -208,7 +238,7 @@ void GameConsole::start()
                 }
             }
         }
-        
+        //enemy collision judge
         for (int i = 0; i < BULLET_MAX; ++i)
         {
             if (bullet[i].get_visibility())
@@ -222,6 +252,8 @@ void GameConsole::start()
                         enemy[j].set_position(MIN_COL + 1, MIN_ROW + 1);
                         bullet[i].hide();
                         bullet[i].set_position(MIN_COL + 1, MAX_ROW - 1);
+                        score++;
+                        update_score();
                         break;
                     }
                 }
@@ -242,3 +274,4 @@ void GameConsole::end()
     system("cls");
     print_end_info();
 }
+
