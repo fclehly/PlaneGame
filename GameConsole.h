@@ -11,8 +11,12 @@
 #define MIN_ROW 0
 #define MAX_COL 50
 #define MIN_COL 0
-#define ENEMY_MAX 5
+#define ENEMY_MAX 20
 #define BULLET_MAX 21
+#define ENEMY_SPEED_NORMAL 10
+#define ENEMY_SPEED_HARD 6
+#define ENEMY_NUM_NORMAL 5
+#define ENEMY_NUM_HARD 10
 class GameConsole
 {
 private:
@@ -21,6 +25,9 @@ private:
     INPUT_RECORD input_record;
 	DWORD record;
 
+    int enemy_num;
+    int enemy_speed;
+    int difficulty;
 	int state;
 	Cursor cursor;
     int score;
@@ -35,6 +42,7 @@ private:
     int random(int low, int high);
     int get_input_vk_code();
     void update_score();
+    void show_menu();
     
     void move_player(int vk_code);
     void move_enemy();

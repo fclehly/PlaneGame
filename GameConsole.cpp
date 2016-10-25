@@ -12,11 +12,31 @@ GameConsole::GameConsole()
 	state = STATE_GAME_ON;
     score = 0;
     h_std_input = GetStdHandle(STD_INPUT_HANDLE);
+    enemy_num = ENEMY_NUM_HARD;
+    enemy_speed = ENEMY_SPEED_HARD;
 }
 
 
 GameConsole::~GameConsole()
 {
+}
+
+void GameConsole::show_menu()
+{
+    cout << endl << endl;
+    cout << "                               PLANE    GAME" << endl;
+    cout << endl << endl;
+    cout << "        --------------------------------------------------------------" << endl;
+    cout << endl;
+    cout << "             Please choose difficulty :" << endl;
+    cout << endl;
+    cout << "             >>> 1. Normal" << endl;
+    cout << "                 2. Hard" << endl;
+    cout << endl;
+    cout << "        --------------------------------------------------------------" << endl;
+    cout << endl;
+    system("pause");
+    system("cls");
 }
 
 void GameConsole::init_player()
@@ -36,7 +56,7 @@ void GameConsole::init_bullet()
 
 void GameConsole::init_enemy(int speed)
 {
-    for (int i = 0; i < ENEMY_MAX; ++i)
+    for (int i = 0; i < enemy_num; ++i)
     {
         enemy[i].set_shape('T');
     }
@@ -136,7 +156,7 @@ void GameConsole::move_player(int vk_code)
 
 void GameConsole::move_enemy()
 {
-    for (int i = 0; i < ENEMY_MAX; ++i)
+    for (int i = 0; i < enemy_num; ++i)
     {
         if (enemy[i].get_visibility())
         {
@@ -176,7 +196,7 @@ void GameConsole::move_bullet()
 
 void GameConsole::generate_enemy()
 {
-    for (int i = 0; i < ENEMY_MAX; ++i)
+    for (int i = 0; i < enemy_num; ++i)
     {
         if (!enemy[i].get_visibility())
         {
@@ -208,7 +228,7 @@ void GameConsole::generate_bullet()
 bool GameConsole::is_enemy_collision()
 {
     bool result = false;
-    for (int i = 0; i < ENEMY_MAX; ++i)
+    for (int i = 0; i < enemy_num; ++i)
     {
         if (enemy[i].get_visibility())
         {
@@ -228,7 +248,7 @@ bool GameConsole::is_enemy_collision()
 
 bool GameConsole::is_player_collision()
 {
-    for (int i = 0; i < ENEMY_MAX; ++i)
+    for (int i = 0; i < enemy_num; ++i)
     {
         if (enemy[i].get_visibility() && enemy[i].is_collision(player.get_position()))
         {
@@ -240,10 +260,11 @@ bool GameConsole::is_player_collision()
 
 void GameConsole::start()
 {
+    show_menu();
     draw_background();
     hide_cursor();
     init_player();
-    init_enemy(10);
+    init_enemy(enemy_speed);
     init_bullet();
 
     int count = 0;
