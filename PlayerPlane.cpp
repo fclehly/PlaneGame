@@ -1,5 +1,10 @@
 #include "PlayerPlane.h"
 
+PlayerPlane::PlayerPlane()
+{
+    
+}
+
 PlayerPlane::PlayerPlane(char s, COORD p) : Plane(s, p)
 {
 }

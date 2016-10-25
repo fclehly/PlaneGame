@@ -2,6 +2,13 @@
 #include <iostream>
 using namespace std;
 
+Bullet::Bullet()
+{
+    visibility = 0;
+    shape = ' ';
+    position.X = position.Y = 0;
+}
+
 Bullet::Bullet(char s, COORD p)
 {
     visibility = false;
@@ -27,8 +34,7 @@ void Bullet::draw()
    if (!visibility)
     {
         visibility = true;
-        Cursor cursor(position);
-        cursor.set_cursor();
+        cursor.set_cursor(position);
         cout << shape;
     }
 }
@@ -38,8 +44,7 @@ void Bullet::hide()
     if (visibility)
     {
         visibility = false;
-        Cursor cursor(position);
-        cursor.set_cursor();
+        cursor.set_cursor(position);
         cout << ' ';
     }
 }
@@ -52,6 +57,11 @@ bool Bullet::get_visibility()
 COORD Bullet::get_position()
 {
     return position;
+}
+
+void Bullet::set_shape(char s)
+{
+    shape = s;
 }
 
 void Bullet::set_position(COORD p)

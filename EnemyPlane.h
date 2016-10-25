@@ -5,15 +5,15 @@
 class EnemyPlane: public Plane
 {
 private:
-    bool flyable;
+    static int speed;
 public:
+    EnemyPlane();
     EnemyPlane(char s);
     EnemyPlane(char s, COORD p);
     EnemyPlane(char s, int x, int y);
     ~EnemyPlane();
-    void fly();
-    bool is_flyable();
-    void set_flyable(bool value);
-
+    static int get_speed();
+    static void set_speed(int value);
 };
+
 

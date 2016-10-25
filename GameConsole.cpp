@@ -1,26 +1,46 @@
 #include "GameConsole.h"
 #include <iostream>
-#include <windows.h>
-#include <conio.h>
+
 #include <time.h>
 #include <string>
-
-#include <windows.h>
-#include <conio.h>
 #include <iostream>
 using namespace std;
-
 
 
 GameConsole::GameConsole()
 {
 	state = STATE_GAME_ON;
     score = 0;
+    h_std_input = GetStdHandle(STD_INPUT_HANDLE);
 }
 
 
 GameConsole::~GameConsole()
 {
+}
+
+void GameConsole::init_player()
+{
+    player.set_shape('W');
+    player.set_position(MAX_COL / 2, MAX_ROW - 1);
+    player.draw();
+}
+
+void GameConsole::init_bullet()
+{
+    for (int i = 0; i < BULLET_MAX; ++i)
+    {
+        bullet[i].set_shape('^');
+    }
+}
+
+void GameConsole::init_enemy(int speed)
+{
+    for (int i = 0; i < ENEMY_MAX; ++i)
+    {
+        enemy[i].set_shape('T');
+    }
+    EnemyPlane::set_speed(speed);
 }
 
 void GameConsole::draw_background()
@@ -83,188 +103,211 @@ int GameConsole::random(int low, int high)
     return rand_num;
 }
 
+int GameConsole::get_input_vk_code()
+{
+    ReadConsoleInput(h_std_input, &input_record, 1, &record);
+    if (record == 1 && input_record.EventType == KEY_EVENT && input_record.Event.KeyEvent.bKeyDown == TRUE)
+    {
+        return input_record.Event.KeyEvent.wVirtualKeyCode;
+    }
+    return -1;
+                
+}
+
+void GameConsole::move_player(int vk_code)
+{
+    switch (vk_code)
+    {
+        case VK_UP:
+            player.move_up();
+            break;
+        case VK_DOWN:
+            player.move_down();
+            break;
+        case VK_LEFT:
+            player.move_left();
+            break;
+        case VK_RIGHT:
+            player.move_right();
+            break;
+    }
+
+}
+
+void GameConsole::move_enemy()
+{
+    for (int i = 0; i < ENEMY_MAX; ++i)
+    {
+        if (enemy[i].get_visibility())
+        {
+            if (enemy[i].get_position().Y == MAX_ROW - 1)
+            {
+                enemy[i].hide();
+            }
+            else
+            {
+               enemy[i].move_down(); 
+            }
+            if (enemy[i].is_collision(player.get_position()))
+            {
+                state = STATE_GAME_END;
+            }
+        }
+    }
+}
+
+void GameConsole::move_bullet()
+{
+    for (int i = 0; i < BULLET_MAX; ++i)
+    {
+        if (bullet[i].get_visibility())
+        {
+            if (bullet[i].get_position().Y == MIN_ROW + 1)
+            {
+                bullet[i].hide();
+            }
+            else
+            {
+                bullet[i].move_up();
+            }
+        }
+    }
+}
+
+void GameConsole::generate_enemy()
+{
+    for (int i = 0; i < ENEMY_MAX; ++i)
+    {
+        if (!enemy[i].get_visibility())
+        {
+            enemy[i].set_position(random(MIN_COL + 1, MAX_COL), MIN_ROW + 1);
+            enemy[i].draw();
+            break;
+        }
+    }
+}
+
+void GameConsole::generate_bullet()
+{ 
+    for (int i = 0; i < BULLET_MAX; ++i)
+    {
+        if (!bullet[i].get_visibility())
+        {
+            int x = player.get_position().X;
+            int y = player.get_position().Y;
+            if (y != MIN_ROW + 1)
+            {
+                bullet[i].set_position(x, y - 1);
+                bullet[i].draw();
+            }
+            break;
+        }
+    }
+}
+
+bool GameConsole::is_enemy_collision()
+{
+    bool result = false;
+    for (int i = 0; i < ENEMY_MAX; ++i)
+    {
+        if (enemy[i].get_visibility())
+        {
+            for (int j = 0; j < BULLET_MAX; ++j)
+            {
+                if (bullet[j].get_visibility() && enemy[i].is_collision(bullet[j].get_position()))
+                {
+                    enemy[i].hide();
+                    result = true;
+                    break;
+                }
+            }
+        }
+    }
+    return result;
+}
+
+bool GameConsole::is_player_collision()
+{
+    for (int i = 0; i < ENEMY_MAX; ++i)
+    {
+        if (enemy[i].get_visibility() && enemy[i].is_collision(player.get_position()))
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
 void GameConsole::start()
 {
     draw_background();
     hide_cursor();
-	HANDLE h_in;
-	h_in = GetStdHandle(STD_INPUT_HANDLE);
-	INPUT_RECORD input_record;
-	DWORD record;
-	
-
-	PlayerPlane p1('W', MAX_COL / 2, MAX_ROW - 1);
-	p1.draw();
-    
-    Bullet bullet[BULLET_MAX] = 
-    {
-        Bullet('^', 1, MAX_ROW - 1),
-        Bullet('^', 1, MAX_ROW - 1),
-        Bullet('^', 1, MAX_ROW - 1),
-        Bullet('^', 1, MAX_ROW - 1),
-        Bullet('^', 1, MAX_ROW - 1),
-        Bullet('^', 1, MAX_ROW - 1),
-        Bullet('^', 1, MAX_ROW - 1),
-        Bullet('^', 1, MAX_ROW - 1),
-        Bullet('^', 1, MAX_ROW - 1),
-        Bullet('^', 1, MAX_ROW - 1),
-        Bullet('^', 1, MAX_ROW - 1),
-        Bullet('^', 1, MAX_ROW - 1),
-        Bullet('^', 1, MAX_ROW - 1),
-        Bullet('^', 1, MAX_ROW - 1),
-        Bullet('^', 1, MAX_ROW - 1),
-        Bullet('^', 1, MAX_ROW - 1),
-        Bullet('^', 1, MAX_ROW - 1),
-        Bullet('^', 1, MAX_ROW - 1),
-        Bullet('^', 1, MAX_ROW - 1),
-        Bullet('^', 1, MAX_ROW - 1),
-        Bullet('^', 1, MAX_ROW - 1),
-    };
-    
-    EnemyPlane enemy[ENEMY_MAX] =
-    {
-        EnemyPlane('T', 0, 0),
-        EnemyPlane('T', 0, 0),
-        EnemyPlane('T', 0, 0),
-        EnemyPlane('T', 0, 0),
-        EnemyPlane('T', 0, 0),
-        EnemyPlane('T', 0, 0),
-        EnemyPlane('T', 0, 0),
-        EnemyPlane('T', 0, 0),
-        EnemyPlane('T', 0, 0),
-        EnemyPlane('T', 0, 0),
-        EnemyPlane('T', 0, 0),
-        EnemyPlane('T', 0, 0),
-        EnemyPlane('T', 0, 0),
-        EnemyPlane('T', 0, 0),
-        EnemyPlane('T', 0, 0),
-        EnemyPlane('T', 0, 0),
-        EnemyPlane('T', 0, 0),
-        EnemyPlane('T', 0, 0),
-        EnemyPlane('T', 0, 0),
-        EnemyPlane('T', 0, 0),
-    };
+    init_player();
+    init_enemy(10);
+    init_bullet();
 
     int count = 0;
+
 	while (true)
 	{
         if (_kbhit())
         {
-            ReadConsoleInput(h_in, &input_record, 1, &record);
-            if (record == 1 && input_record.EventType == KEY_EVENT && input_record.Event.KeyEvent.bKeyDown == TRUE)
+            int vk_code = get_input_vk_code();
+            switch (vk_code)
             {
-                int j = 0;
-                switch (input_record.Event.KeyEvent.wVirtualKeyCode)
-                {
-                case VK_DOWN:
-                    p1.move_down();
-                    break;
                 case VK_UP:
-                    p1.move_up();
-                    break;
+                case VK_DOWN:
                 case VK_LEFT:
-                    p1.move_left();
-                    break;
                 case VK_RIGHT:
-                    p1.move_right();
-                    break;
-                case VK_SPACE:
-                    for (j = 0; j < BULLET_MAX; ++j)
-                    {
-                        if (!bullet[j].get_visibility())
-                        {
-                            bullet[j].set_position(p1.get_position().X, p1.get_position().Y - 1);
-                            bullet[j].draw();
-                            break;
-                        }
-                    }
+                    move_player(vk_code);
                     break;
                 case VK_ESCAPE:
                     state = STATE_GAME_END;
                     break;
-                }
-            }
-        }
-        Sleep(100);
-        count++;
-        //bullet move
-        for (int i = 0; i < BULLET_MAX; ++i)
-        {
-            if (bullet[i].get_visibility())
-            {
-                
-                if (bullet[i].get_position().Y == MIN_ROW + 1)
-                {
-                    bullet[i].hide();
-                    bullet[i].set_position(1, MAX_ROW - 1);
-                }
-                else
-                {
-                    bullet[i].move_up();
-                }
-                
-            }
-        }
-        //enemy move
-        if (count >= 5)
-        {
-            count = 0;
-            for (int i = 0; i < ENEMY_MAX; ++i)
-            {
-                if (!enemy[i].is_flyable())
-                {
-                    enemy[i].set_flyable(true);
-                    enemy[i].set_position(random(MIN_COL + 1, MAX_COL - 1), MIN_ROW + 1);
-                    enemy[i].draw();
+                case VK_SPACE:
+                    generate_bullet();
                     break;
-                }
-            }
-            for (int i = 0; i < ENEMY_MAX; ++i)
-            {
-                if (enemy[i].is_flyable())
-                {
-                    enemy[i].move_down();
-                    if (enemy[i].is_collision(p1.get_position()))
-                    {
-                        state = STATE_GAME_END;
-                        break;
-                    }
-                    if (enemy[i].get_position().Y == MAX_ROW - 1)
-                    {
-                        enemy[i].set_flyable(false);
-                        enemy[i].hide();
-                        enemy[i].set_position(MIN_COL + 1, MIN_ROW + 1);
-                    }
-                }
-            }
-        }
-        //enemy collision judge
-        for (int i = 0; i < BULLET_MAX; ++i)
-        {
-            if (bullet[i].get_visibility())
-            {
-                for (int j = 0; j < ENEMY_MAX; ++j)
-                {
-                    if (enemy[j].is_flyable() && enemy[j].is_collision(bullet[i].get_position()))
-                    {
-                        enemy[j].hide();
-                        enemy[j].set_flyable(false);
-                        enemy[j].set_position(MIN_COL + 1, MIN_ROW + 1);
-                        bullet[i].hide();
-                        bullet[i].set_position(MIN_COL + 1, MAX_ROW - 1);
-                        score++;
-                        update_score();
-                        break;
-                    }
-                }
             }
         }
         
+        if (is_player_collision())
+        {
+            state = STATE_GAME_END;
+        }
         
 		if (state == STATE_GAME_END)
 		{
 			break;
 		}
+         
+        if (count % (EnemyPlane::get_speed() * 6) == 0)
+        {
+            count = 0;
+            generate_enemy();
+        }
+        
+        Sleep(50);
+        count++;
+        
+        if (count % 5 == 0)
+        {
+            move_bullet();
+            if (is_enemy_collision())
+            {
+                score++;
+                update_score();
+            }
+        }
+        
+        if (count % EnemyPlane::get_speed() == 0)
+        {
+            move_enemy();
+        }
+        if (state == STATE_GAME_END)
+		{
+			break;
+		}
+             
 	}
     end();
 }
