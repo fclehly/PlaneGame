@@ -79,6 +79,15 @@ void Bullet::set_position(int x, int y)
 
 void Bullet::move_down()
 {
+    if (position.Y < MAX_ROW)
+	{
+		Cursor cursor(position);
+		cursor.set_cursor();
+		cout << " ";
+		position.Y++;
+		cursor.set_cursor(position);
+		cout << shape;
+	}
 }
 
 void Bullet::move_up()
